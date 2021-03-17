@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
-const { F } = require('ramda');
+const { accounts, users, writeJSN } = require('./data');
 const debug = require('debug')('app:app');
 const app = express();
 
@@ -17,17 +17,6 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// accounts
-const accountsPath = path.join(__dirname, 'json', 'accounts.json');
-//console.log(accountsPath);
-const accountData = fs.readFileSync(accountsPath, 'utf-8');
-const accounts = JSON.parse(accountData);
-
-// accounts
-const usersPath = path.join(__dirname, 'json', 'users.json');
-//console.log(usersPath);
-const userData = fs.readFileSync(usersPath, 'utf-8');
-const users = JSON.parse(userData);
 //console.log(users[0]);
 app.get('/', (req, res) => {
   return res.render('index', { title: 'Account Summary', accounts: accounts });
@@ -53,9 +42,7 @@ app.post('/transfer', (req, res) => {
   accounts[from].balance -= parseInt(amount);
   accounts[to].balance += parseInt(amount);
 
-  const accountsJSON = JSON.stringify(accounts);
-  debug(accountsJSON);
-  fs.writeFileSync(accountsPath, accountsJSON, 'utf-8');
+  writeJSON();
   debug(req);
   return res.render('transfer', { message: 'Transfer Completed' });
 });
@@ -73,8 +60,7 @@ app.post('/payment', (req, res) => {
   debug(amount);
   accounts.credit.balance -= parseInt(amount);
   accounts.credit.available += parseInt(amount);
-  const accountsJSON = JSON.stringify(accounts);
-  fs.writeFileSync(accountsPath, accountsJSON, 'utf-8');
+  writeJSON();
   return res.render('payment', {
     message: 'Payment Successful',
     account: accounts.credit,
