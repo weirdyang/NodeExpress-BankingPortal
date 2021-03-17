@@ -14,16 +14,16 @@ app.set('view engine', 'ejs');
 
 // accounts
 const accountsPath = path.join(__dirname, 'json', 'accounts.json');
-console.log(accountsPath);
+//console.log(accountsPath);
 const accountData = fs.readFileSync(accountsPath, 'utf-8');
 const accounts = JSON.parse(accountData);
 
 // accounts
 const usersPath = path.join(__dirname, 'json', 'users.json');
-console.log(usersPath);
+//console.log(usersPath);
 const userData = fs.readFileSync(usersPath, 'utf-8');
 const users = JSON.parse(userData);
-console.log(users[0]);
+//console.log(users[0]);
 app.get('/', (req, res) => {
   return res.render('index', { title: 'Account Summary', accounts: accounts });
 });
