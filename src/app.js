@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
-const { accounts, users, writeJSN } = require('./data');
+const { accounts, users, writeJSON } = require('./data');
 const debug = require('debug')('app:app');
 const app = express();
 const accountRoutes = require('./routes/accounts');
